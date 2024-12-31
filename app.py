@@ -1,11 +1,9 @@
 from flask import request, jsonify, Flask
 import sqlite3
 from datetime import datetime
-import sendmail
-import sendsms
+
 from producer import NotificationProducer
 from flask_cors import CORS
-
 
 
 
@@ -62,9 +60,10 @@ def send_notification():
         message = data.get('message')
         mail_id = data.get('mail_id')
         mobile_no = data.get('mobile_no')
+        type=data.get('type')
 
         # Validate input
-        if not all([user_id, message, mail_id, mobile_no]):
+        if not all([user_id, message, mail_id, mobile_no,type]):
             return jsonify({
                 'error': 'All fields (user_id, message, mail_id, mobile_no) are required'
             }), 400
@@ -75,6 +74,7 @@ def send_notification():
             'message': message,
             'mail_id': mail_id,
             'mobile_no': mobile_no,
+            'type':type,
             'timestamp': datetime.now().isoformat()
         }
 

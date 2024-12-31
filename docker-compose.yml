@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # Default RabbitMQ port
+      - "15672:15672" # RabbitMQ management UI
+    healthcheck:        # Healthcheck to ensure RabbitMQ is ready
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  flask-app:
+    build: .
+    container_name: flask-app
+    ports:
+      - "7080:7080"  # Changed to match your Flask port
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: >
+      sh -c "sleep 10 && python app.py"  # Delay app startup until rabbitmq is ready
+    environment:
+      RABBITMQ_HOST: rabbitmq  # Use RabbitMQ service name
+      RABBITMQ_PORT: 5672
+
+  consumer:
+    build: .
+    container_name: notification-consumer
+    command: python consumer.py
+    depends_on:
+      - rabbitmq

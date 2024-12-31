@@ -6,7 +6,8 @@ class NotificationProducer:
     def __init__(self):
         # Initialize RabbitMQ connection
         self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost')
+            pika.ConnectionParameters(host='rabbitmq',
+                            heartbeat=600,)
         )
         self.channel = self.connection.channel()
         

@@ -12,13 +12,13 @@ class NotificationConsumer:
     def connect(self):
         """Establish connection with RabbitMQ"""
         self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost')
+            pika.ConnectionParameters(host='rabbitmq')
         )
         self.channel = self.connection.channel()
         
         # Declare queue
         self.channel.queue_declare(queue='notification_queue', durable=True)
-        
+       
         # Only get one message at a time
         self.channel.basic_qos(prefetch_count=1)
 
@@ -35,19 +35,20 @@ class NotificationConsumer:
         try:
             # Parse notification data
             notification = json.loads(body)
-            
+            if(notification['type']=='email'):
             # Send email
-            sendmail.sendmail(
-                notification['mail_id'],
-                notification['message']
-            )
+                sendmail.sendmail(
+                    notification['mail_id'],
+                    notification['message']
+                )
             
             # Send SMS
-            sendsms.sendmessage(
-                notification['message'],
-                notification['mobile_no']
-            )
-            
+            elif(notification['type']=='sms'):
+                sendsms.sendmessage(
+                    notification['message'],
+                    notification['mobile_no']
+                )
+                
             print(f"Processed notification: {notification}")
             
             # Acknowledge message
