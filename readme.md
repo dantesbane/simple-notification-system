@@ -1,14 +1,26 @@
-# Run pip install -r requirements.txt
+# TO run the code 
+run docker compose up --build 
 
-# Install Rabbitmq and erlang after following the steps listed at the site
-https://www.rabbitmq.com/docs/install-windows
+#
+this will build the docker container with a functioning rabbitmq server, it will also start a flask server and the consumer.py to send the api calls
 
-# Start your Rabbitmq server
+# To send mail 
+simply send a post request here
+http://localhost:7080/notifications
+#
+{
+  "user_id": 3,
+  "message": "message",
+  "mail_id":"mail",
+  "mobile_no": "number",
+  "type":"email"
+}
+#
+this is thejson format
 
-<p> After the server has started you should run python app.py in the main directory</p>
-<br>
+To send messages you will need make a CONF.py and then add your own api key  from twilio. Messages can only be sent to your own registered mobile number using the free version of the api. 
 
-# After running app.py run consumer.py
+Rabbitmq server will stay active for 10 mins without any inactivity, if you exceed 10 mins then the server will start to shutdown. You can easily reconfigure this. 
+https://github.com/dantesbane/notification-app
 
-you will need your own api key to run and send sms notifications using twilio.
-You can however send normal mail notifications from without needing any other key.
+you can also use the flutter app to see all the notifications from this url
