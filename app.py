@@ -4,8 +4,13 @@ from datetime import datetime
 import sendmail
 import sendsms
 from producer import NotificationProducer
+from flask_cors import CORS
+
+
+
 
 app = Flask(__name__)
+CORS(app)
 #producer object
 notification_producer = NotificationProducer()
 
