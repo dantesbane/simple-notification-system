@@ -24,3 +24,4 @@ Rabbitmq server will stay active for 10 mins without any inactivity, if you exce
 https://github.com/dantesbane/notification-app
 
 you can also use the flutter app to see all the notifications from this url
+sending mail notifications however has no restrictions and can be use whenever as the app password of the throwaway mail id is in sendmail.py
